@@ -1,0 +1,11 @@
+venv/
+venv3.6/
+.idea/
+data/output/xyzi_m1255_1187.csv
+data/source/xyzi_m1255_1187.csv
+*/__pycache__/
+*/.DS_Store
+/prepare/tmp
+.DS_Store
+notebooks/.ipynb_checkpoints
+__pycache__/
