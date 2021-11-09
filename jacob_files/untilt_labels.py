@@ -7,8 +7,8 @@ Created on Fri Nov  5 18:41:04 2021
 """
 import numpy as np
 
-from utils import untilt_ptc, corners_to_center
-import visualize_utils as V
+from .utils import untilt_ptc, corners_to_center
+from . import visualize_utils as V
 
 #place your point cloud file path here
 csv_file = '/home/jacob/metrolinx_dataset/1412_1419/ouster/xyzi_m1412_1279.csv'

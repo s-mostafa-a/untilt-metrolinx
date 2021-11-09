@@ -9,9 +9,8 @@ visualization for metrolinx dataset
 
 import numpy as np
 import mayavi.mlab as mlab
-import open3d as o3d
 
-import visualize_utils as V
+from . import visualize_utils as V
 
 
 #file = 
