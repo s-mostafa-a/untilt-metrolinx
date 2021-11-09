@@ -8,3 +8,4 @@ mayavi/
 .DS_Store
 notebooks/.ipynb_checkpoints
 __pycache__/
+not_upload_data/
