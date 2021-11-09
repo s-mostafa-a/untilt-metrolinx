@@ -10,6 +10,3 @@ def rotate_points(points):
     rotated_points_transpose = rotated_points_transpose * np.array([[-1], [-1], [1]])
     rotated_points = rotated_points_transpose.T
     return rotated_points
-
-def visualize_point_cloud():
-    pass
