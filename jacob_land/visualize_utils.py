@@ -184,9 +184,7 @@ def read_metro_linx_label_untilt(label_filename):
     # 3d_boxes: (N, 7) [x, y, z, dx, dy, dz, heading], (x, y, z) is the box center
     for i in range(len(objects)):
         an_object = objects[i]
-        box = [an_object.t[0], an_object.t[1], an_object.t[2], an_object.w, an_object.l,
-               an_object.h,
-               an_object.ry]
+        box = [an_object.t[0], an_object.t[1], an_object.t[2], an_object.h, an_object.w, an_object.l, an_object.ry]
         boxes.append(box)
         labels.append(an_object.type)
         t.append(an_object.truncation)
@@ -406,6 +404,7 @@ def fix_bb(points, corners3d):
     # fig = draw_corners3d(corners3d, fig=fig, color=(0, 0, 1), max_num=100)
     # mlab.view(azimuth=-179, elevation=54.0, distance=104.0, roll=90.0)
     return corners3d
+
 
 def draw_metrolinx_scene(points, corners3d):
     fig = visualize_pts(points)

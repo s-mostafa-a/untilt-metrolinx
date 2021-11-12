@@ -14,8 +14,6 @@ def rotate_txt(file_name):
     path_to_result_labels = os.path.join(OUTPUT_DIRECTORY, file_name)
 
     boxes, labels, truncation = JV.read_metro_linx_label_untilt(path_to_source_labels)
-    print(boxes)
-    print("--------------------------")
     corners3d = JV.boxes_to_corners_3d(boxes).squeeze(0)
     # corners3d_xyz = corners3d[:, [0, 2, 1]]
     corners3d_xyz = corners3d
@@ -29,14 +27,39 @@ def rotate_txt(file_name):
     # print(np.mean(new_corners_xyz, axis=0))
     print(new_corners)
     print(np.mean(new_corners, axis=0))
-    new_box = JU.corners_to_center(new_corners).squeeze(0)
+    new_box = JU.corners_to_center(new_corners)
     print(new_box)
     alpha = np.arctan2(new_box[1], new_box[0])
-    kitti_list = [str(labels[0]), str(truncation[0]), str(0), str(round(alpha, 2)), 'Nan', 'Nan',
-                  'Nan', 'Nan', str(round(new_box[5], 2)), str(round(new_box[4], 2)),
-                  str(round(new_box[3], 2)), str(round(new_box[0], 2)),
-                  str(round(new_box[1], 2)), str(round(new_box[2], 2)),
-                  str(round(new_box[6], 2) - 1.57)]
+    kitti_list = [str(labels[0]),
+
+                  # truncated
+                  str(truncation[0]),
+
+                  # occluded
+                  str(0),
+
+                  # alpha
+                  str(round(alpha, 2)),
+
+                  # bbox
+                  'Nan', 'Nan', 'Nan', 'Nan',
+
+                  # height
+                  str(round(new_box[3], 2)),
+                  # width
+                  str(round(new_box[4], 2)),
+                  # length
+                  str(round(new_box[5], 2)),
+
+                  # x
+                  str(round(new_box[0], 2)),
+                  # y
+                  str(round(new_box[1], 2)),
+                  # z
+                  str(round(new_box[2] , 2)),
+
+                  # yr
+                  str(round(new_box[6] - 1.57, 2))]
     with open(path_to_result_labels, 'w') as out:
         out.write(' '.join(str(i) for i in kitti_list) + '\n')
 
