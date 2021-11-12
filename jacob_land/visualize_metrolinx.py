@@ -6,20 +6,20 @@ Created on Wed Oct 27 17:17:20 2021
 @author: jacob
 visualization for metrolinx dataset
 """
-
-import numpy as np
 import mayavi.mlab as mlab
 
-from . import visualize_utils as V
+import numpy as np
+
+from jacob_land import visualize_utils as V
 
 # file =
 
 # for file in files:
 # place your point cloud file path here
-csv_file = '/home/jacob/metrolinx_dataset/1412_1419/untilted_outser/xyzi_m1412_1279.csv'
+csv_file = '../data/point_cloud/input/xyzi_sample1.csv'
 
 # place your label file here
-label_file = '/home/jacob/metrolinx_dataset/1412_1419/test/label_m1412_1279.txt'
+label_file = '../data/labels/output/label_m1412_1279.txt'
 
 # loads point cloud
 pointclouds = np.genfromtxt(csv_file, delimiter=',')
