@@ -184,9 +184,9 @@ def read_metro_linx_label_untilt(label_filename):
     # 3d_boxes: (N, 7) [x, y, z, dx, dy, dz, heading], (x, y, z) is the box center
     for i in range(len(objects)):
         an_object = objects[i]
-        box = [an_object.t[0], an_object.t[2], an_object.t[1], an_object.w, an_object.l,
+        box = [an_object.t[0], an_object.t[1], an_object.t[2], an_object.w, an_object.l,
                an_object.h,
-               an_object.ry]  # this might be revisited, i think heading is worngly calculated....
+               an_object.ry]
         boxes.append(box)
         labels.append(an_object.type)
         t.append(an_object.truncation)

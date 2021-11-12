@@ -16,13 +16,15 @@ from jacob_land import visualize_utils as V
 
 # for file in files:
 # place your point cloud file path here
-csv_file = '../data/point_cloud/input/xyzi_sample1.csv'
+csv_file = '../data/point_cloud/output/xyzi_m1412_1279.csv'
+csv_file2 = '../data/point_cloud/output/xyzi_sample1.csv'
 
 # place your label file here
 label_file = '../data/labels/output/label_m1412_1279.txt'
 
 # loads point cloud
 pointclouds = np.genfromtxt(csv_file, delimiter=',')
+pointclouds2 = np.genfromtxt(csv_file2, delimiter=',')
 
 # loads labels
 boxes, _, _ = V.read_metro_linx_label(label_file)
@@ -32,5 +34,6 @@ corners3d = V.boxes_to_corners_3d(boxes)
 
 # draw_scene
 V.draw_metrolinx_scene(pointclouds, corners3d)
+V.draw_metrolinx_scene(pointclouds2, corners3d)
 # mlab.savefig(filename='test.png')
 mlab.show(stop=True)
