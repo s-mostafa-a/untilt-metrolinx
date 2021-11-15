@@ -54,7 +54,7 @@ def corners_to_center(corners_3d):
     dy = distances(corners_3d[2], corners_3d[1])
     dz = distances(corners_3d[2], corners_3d[6])
 
-    return np.array([cx, cy, cz, dx, dy, dz, rz])
+    return np.array([[cx, cy, cz, dx, dy, dz, rz]])
 
 
 def untilt_ptc(pointclouds, rot):
@@ -70,3 +70,4 @@ def untilt_ptc(pointclouds, rot):
     mat_pnts_out = pointclouds
     mat_pnts_out[:, 0:3] = mat_pnts_out_temp
     return mat_pnts_out
+

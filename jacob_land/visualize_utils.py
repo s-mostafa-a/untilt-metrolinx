@@ -184,7 +184,9 @@ def read_metro_linx_label_untilt(label_filename):
     # 3d_boxes: (N, 7) [x, y, z, dx, dy, dz, heading], (x, y, z) is the box center
     for i in range(len(objects)):
         an_object = objects[i]
-        box = [an_object.t[0], an_object.t[1], an_object.t[2], an_object.h, an_object.w, an_object.l, an_object.ry]
+        box = [an_object.t[0], an_object.t[2], an_object.t[1], an_object.w, an_object.l,
+               an_object.h,
+               an_object.ry]  # this might be revisited, i think heading is worngly calculated....
         boxes.append(box)
         labels.append(an_object.type)
         t.append(an_object.truncation)
@@ -426,7 +428,6 @@ def draw_corners3d(corners3d, fig, color=(1, 1, 1), line_width=2, cls=None, tag=
     :param max_num:
     :return:
     """
-    # import mayavi.mlab as mlab
     num = min(max_num, len(corners3d))
     for n in range(num):
         b = corners3d[n]  # (8, 3)
