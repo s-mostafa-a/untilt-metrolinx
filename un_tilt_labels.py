@@ -9,6 +9,17 @@ INPUT_DIRECTORY = './data/labels/input'
 OUTPUT_DIRECTORY = './data/labels/output'
 
 
+def center_to_eight_corners(x, y, z, height, width, length):
+    return np.array([[x + length / 2, y, z + width / 2],
+                     [x + length / 2, y, z - width / 2],
+                     [x - length / 2, y, z + width / 2],
+                     [x - length / 2, y, z - width / 2],
+                     [x + length / 2, y - height, z + width / 2],
+                     [x + length / 2, y - height, z - width / 2],
+                     [x - length / 2, y - height, z + width / 2],
+                     [x - length / 2, y - height, z - width / 2]])
+
+
 def rotate_txt(file_name):
     path_to_source_labels = os.path.join(INPUT_DIRECTORY, file_name)
     path_to_result_labels = os.path.join(OUTPUT_DIRECTORY, file_name)
@@ -56,7 +67,7 @@ def rotate_txt(file_name):
                   # y
                   str(round(new_box[1], 2)),
                   # z
-                  str(round(new_box[2] , 2)),
+                  str(round(new_box[2], 2)),
 
                   # yr
                   str(round(new_box[6] - 1.57, 2))]
