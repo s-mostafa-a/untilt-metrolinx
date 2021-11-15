@@ -1,5 +1,6 @@
 venv/
 venv3.6/
+venv_new/
 .idea/
 mayavi/
 */__pycache__/
