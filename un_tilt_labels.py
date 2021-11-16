@@ -36,10 +36,7 @@ def rotate_txt(file_name):
     new_corners = rotate_points(corners3d_xyz)
     # print(np.mean(new_corners, axis=0))
     # print(np.mean(new_corners_xyz, axis=0))
-    print(new_corners)
-    print(np.mean(new_corners, axis=0))
-    new_box = JU.corners_to_center(new_corners)
-    print(new_box)
+    new_box = JU.corners_to_center(new_corners).squeeze(0)
     alpha = np.arctan2(new_box[1], new_box[0])
     kitti_list = [str(labels[0]),
 
@@ -56,11 +53,11 @@ def rotate_txt(file_name):
                   'Nan', 'Nan', 'Nan', 'Nan',
 
                   # height
-                  str(round(new_box[3], 2)),
+                  str(round(new_box[5], 2)),
                   # width
                   str(round(new_box[4], 2)),
                   # length
-                  str(round(new_box[5], 2)),
+                  str(round(new_box[3], 2)),
 
                   # x
                   str(round(new_box[0], 2)),
@@ -69,8 +66,9 @@ def rotate_txt(file_name):
                   # z
                   str(round(new_box[2], 2)),
 
-                  # yr
-                  str(round(new_box[6] - 1.57, 2))]
+                  # rz (previous ry)
+                  str(round(new_box[6], 2) - 1.57)]
+
     with open(path_to_result_labels, 'w') as out:
         out.write(' '.join(str(i) for i in kitti_list) + '\n')
 
