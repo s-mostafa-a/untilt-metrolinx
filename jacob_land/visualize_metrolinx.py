@@ -10,7 +10,7 @@ visualization for metrolinx dataset
 import numpy as np
 import mayavi.mlab as mlab
 
-from .visualize_utils import read_metro_linx_label, boxes_to_corners_3d, draw_metrolinx_scene
+from jacob_land.visualize_utils import read_metro_linx_label, boxes_to_corners_3d, draw_metrolinx_scene
 
 # file =
 
