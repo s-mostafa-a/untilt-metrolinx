@@ -5,8 +5,8 @@ from jacob_land import utils as JU
 from utils import rotate_points
 
 # you may want to change these variables
-INPUT_DIRECTORY = './data/labels/input'
-OUTPUT_DIRECTORY = './data/labels/output'
+INPUT_DIRECTORY = './not_upload_data/labels/input'
+OUTPUT_DIRECTORY = './not_upload_data/labels/output'
 
 
 def center_to_eight_corners(x, y, z, height, width, length):

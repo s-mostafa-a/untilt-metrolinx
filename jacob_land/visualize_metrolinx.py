@@ -16,22 +16,28 @@ from visualize_utils import read_metro_linx_label, boxes_to_corners_3d, draw_met
 
 # for file in files:
 # place your point cloud file path here
-csv_file = '../data/point_cloud/output/xyzi_m1412_1279.csv'
-csv_file2 = '../data/point_cloud/output/xyzi_sample1.csv'
+file = '1215'
+tilt_csv_file = f'../not_upload_data/point_cloud/input/xyzi_m1412_{file}.csv'
+untilt_csv_file = f'../not_upload_data/point_cloud/output/xyzi_m1412_{file}.csv'
 
 # place your label file here
-label_file = '../data/labels/output/label_m1412_1279.txt'
+tilt_label_file = f'../not_upload_data/labels/input/label_m1412_{file}.txt'
+untilt_label_file = f'../not_upload_data/labels/output/label_m1412_{file}.txt'
 
 # loads point cloud
-pointclouds = np.genfromtxt(csv_file, delimiter=',')
+tilt_pointclouds = np.genfromtxt(tilt_csv_file, delimiter=',')
+untilt_pointclouds = np.genfromtxt(untilt_csv_file, delimiter=',')
 
 # loads labels
-boxes, _, _ = read_metro_linx_label(label_file)
+tilt_boxes, _, _ = read_metro_linx_label(tilt_label_file)
+untilt_boxes, _, _ = read_metro_linx_label(untilt_label_file)
 
 # converted kitti object into 8 point corners
-corners3d = boxes_to_corners_3d(boxes)
+tilt_corners3d = boxes_to_corners_3d(tilt_boxes)
+untilt_corners3d = boxes_to_corners_3d(untilt_boxes)
 
 # draw_scene
-draw_metrolinx_scene(pointclouds, corners3d)
+draw_metrolinx_scene(tilt_pointclouds, tilt_corners3d)
+draw_metrolinx_scene(untilt_pointclouds, untilt_corners3d)
 # mlab.savefig(filename='test.png')
 mlab.show(stop=True)
