@@ -1,7 +1,7 @@
 import numpy as np
 import mayavi.mlab as mlab
 from copy import deepcopy
-from jacob_land.visualize_utils import read_metro_linx_label, draw_metrolinx_scene
+from jacob_land.visualize_utils import draw_metrolinx_scene
 from utils import rotate_points
 import torch
 
@@ -144,27 +144,12 @@ def main():
     tilt_label_file = f'./data/labels/input/label_m1412_{file_number}.txt'
     tilt_pointclouds = np.genfromtxt(tilt_csv_file, delimiter=',')
     kitty_objs = read_kitti_format_for_metrolinx(tilt_label_file)
-    tilt_boxes, _, _ = read_metro_linx_label(tilt_label_file)
     kitty_boxes = np.array([ko.get_3d_box_in_world_coordinates() for ko in kitty_objs])
-    print(kitty_boxes)
-    # my_corners = center_to_eight_corners(kitty_objs[0].get_xyz(), kitty_objs[0].get_hwl())
     tilt_corners3d = boxes_to_corners_3d(kitty_boxes)
-    # print(tilt_corners3d)
-    # print(boxes_to_corners_3d(tilt_boxes))
-    #
-    # exit(0)
-    tilt_boxes, _, _ = read_metro_linx_label(tilt_label_file)
-    kitty_objs = read_kitti_format_for_metrolinx(tilt_label_file)
-    # my_corners = center_to_eight_corners(kitty_objs[0].get_xyz(), kitty_objs[0].get_hwl())
-    # my_corners = my_corners[:, [0, 2, 1]]
-    # tilt_corners3d = boxes_to_corners_3d(tilt_boxes)
-    # print(my_corners)
-    # print(tilt_corners3d)
 
-    # print(center_to_eight_corners())
-    untilt_pointclouds = deepcopy(tilt_pointclouds)
-    untilt_pointclouds[:, :3] = rotate_points(tilt_pointclouds[:, :3])
-    untilt_corners3d = rotate_points(tilt_corners3d.squeeze(0))[None, ::]
+    # untilt_pointclouds = deepcopy(tilt_pointclouds)
+    # untilt_pointclouds[:, :3] = rotate_points(tilt_pointclouds[:, :3])
+    # untilt_corners3d = rotate_points(tilt_corners3d.squeeze(0))[None, ::]
     # draw_metrolinx_scene(untilt_pointclouds, untilt_corners3d)
     # draw_metrolinx_scene(tilt_pointclouds, my_corners[None, ::])
     draw_metrolinx_scene(tilt_pointclouds, tilt_corners3d)
