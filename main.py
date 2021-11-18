@@ -90,12 +90,20 @@ class KittyObject(object):
     def get_hwl(self):
         return self._hwl
 
+    def set_xyz(self, xyz):
+        self._xyz = xyz
+
+    def set_hwl(self, hwl):
+        self._hwl = hwl
+
     def get_type(self):
         return self._type
 
     def get_line_for_txt_file(self):
-        array_str = np.char.mod('%.2f', self._array)
-        return f'{self._type} {" ".join(array_str)}'
+        return f'''{self._type} {int(
+            self._truncation)} {int(self._occlusion)} {
+        self._alpha} {' '.join(np.char.mod('%.2f', self._2d_bbox))} {' '.join(np.char.mod('%.2f', self._hwl))} {
+        ' '.join(np.char.mod('%.2f', self._xyz))} {self._rotation_y}'''
 
     def _hlw(self):
         return self._hwl[[0, 2, 1]]
@@ -155,6 +163,7 @@ def main():
     kitty_objs = read_kitti_format_for_metrolinx(tilt_label_file)
     kitty_boxes = np.array([ko.get_3d_box_in_world_coordinates() for ko in kitty_objs])
     tilt_corners3d = boxes_to_corners_3d(kitty_boxes)
+    print(kitty_objs[0].get_line_for_txt_file())
     kitty_boxes[0, 6] = 0
     tilt_corners3d_1 = boxes_to_corners_3d(kitty_boxes)
     corners_3d_to_boxes(tilt_corners3d[0])
