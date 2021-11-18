@@ -16,13 +16,13 @@ from visualize_utils import read_metro_linx_label, boxes_to_corners_3d, draw_met
 
 # for file in files:
 # place your point cloud file path here
-file = '1215'
-tilt_csv_file = f'../not_upload_data/point_cloud/input/xyzi_m1412_{file}.csv'
-untilt_csv_file = f'../not_upload_data/point_cloud/output/xyzi_m1412_{file}.csv'
+file = '1279'
+tilt_csv_file = f'../data/point_cloud/input/xyzi_m1412_{file}.csv'
+untilt_csv_file = f'../data/point_cloud/output/xyzi_m1412_{file}.csv'
 
 # place your label file here
-tilt_label_file = f'../not_upload_data/labels/input/label_m1412_{file}.txt'
-untilt_label_file = f'../not_upload_data/labels/output/label_m1412_{file}.txt'
+tilt_label_file = f'../data/labels/input/label_m1412_{file}.txt'
+untilt_label_file = f'../data/labels/output/label_m1412_{file}.txt'
 
 # loads point cloud
 tilt_pointclouds = np.genfromtxt(tilt_csv_file, delimiter=',')

@@ -39,7 +39,7 @@ def rotate_points_along_z(points, angle):
     return points_rot.numpy() if is_numpy else points_rot
 
 
-def boxes_to_corners_3d(boxes3d):
+def box_to_corners_3d(boxes3d):
     """
         7 -------- 4
        /|         /|
@@ -96,14 +96,20 @@ class KittyObject(object):
     def set_hwl(self, hwl):
         self._hwl = hwl
 
+    def set_alpha(self, alpha):
+        self._alpha = alpha
+
     def get_type(self):
         return self._type
+
+    def set_rotation_y(self, rotation_y):
+        self._rotation_y = rotation_y
 
     def get_line_for_txt_file(self):
         return f'''{self._type} {int(
             self._truncation)} {int(self._occlusion)} {
         self._alpha} {' '.join(np.char.mod('%.2f', self._2d_bbox))} {' '.join(np.char.mod('%.2f', self._hwl))} {
-        ' '.join(np.char.mod('%.2f', self._xyz))} {self._rotation_y}'''
+        ' '.join(np.char.mod('%.2f', self._xyz))} {round(self._rotation_y, 2)}'''
 
     def _hlw(self):
         return self._hwl[[0, 2, 1]]
@@ -162,10 +168,10 @@ def main():
     tilt_pointclouds = np.genfromtxt(tilt_csv_file, delimiter=',')
     kitty_objs = read_kitti_format_for_metrolinx(tilt_label_file)
     kitty_boxes = np.array([ko.get_3d_box_in_world_coordinates() for ko in kitty_objs])
-    tilt_corners3d = boxes_to_corners_3d(kitty_boxes)
+    tilt_corners3d = box_to_corners_3d(kitty_boxes)
     print(kitty_objs[0].get_line_for_txt_file())
     kitty_boxes[0, 6] = 0
-    tilt_corners3d_1 = boxes_to_corners_3d(kitty_boxes)
+    tilt_corners3d_1 = box_to_corners_3d(kitty_boxes)
     corners_3d_to_boxes(tilt_corners3d[0])
     print("that", kitty_objs[0].get_rotation_y())
 
