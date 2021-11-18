@@ -23,9 +23,62 @@ def rotate_txt(file_name):
     kitty_obj.set_rotation_y(new_box[6])
     print(new_box)
     print(kitty_obj.get_line_for_txt_file())
-    with open(path_to_result_labels, 'w') as out:
-        out.write(kitty_obj.get_line_for_txt_file() + '\n')
 
+
+    boxes, labels, truncation = JV.read_metro_linx_label_untilt(path_to_source_labels)
+    corners3d = JV.boxes_to_corners_3d(boxes).squeeze(0)
+    # corners3d_xyz = corners3d[:, [0, 2, 1]]
+    corners3d_xyz = corners3d
+    # print(corners3d_xyz)
+    # print(np.mean(corners3d, axis=0))
+    # print(np.mean(corners3d_xyz, axis=0))
+    # new_corners_xyz = rotate_points(corners3d_xyz)
+    # new_corners = new_corners_xyz[:, [0, 2, 1]]
+    new_corners = rotate_points(corners3d_xyz)
+    # print(np.mean(new_corners, axis=0))
+    # print(np.mean(new_corners_xyz, axis=0))
+    print(new_corners)
+    print(np.mean(new_corners, axis=0))
+    new_box = JU.corners_to_center(new_corners).squeeze(0)
+    print(new_box)
+    alpha = np.arctan2(new_box[1], new_box[0])
+    kitti_list = [str(labels[0]),
+
+                  # truncated
+                  str(truncation[0]),
+
+                  # occluded
+                  str(0),
+
+                  # alpha
+                  str(round(alpha, 2)),
+
+                  # bbox
+                  'Nan', 'Nan', 'Nan', 'Nan',
+
+                  # height
+                  str(round(new_box[3], 2)),
+                  # width
+                  str(round(new_box[4], 2)),
+                  # length
+                  str(round(new_box[5], 2)),
+
+                  # x
+                  str(round(new_box[0], 2)),
+                  # y
+                  str(round(new_box[1], 2)),
+                  # z
+                  str(round(new_box[2], 2)),
+
+                  # yr
+                  str(round(new_box[6] - 1.57, 2))]
+    # str(round(new_box[0, 5], 2)),
+    # str(round(new_box[0, 4], 2)),
+    # str(round(new_box[0, 3], 2)),
+    # str(round(new_box[0, 0], 2)),
+    # str(round(new_box[0, 1], 2)),
+    # str(round(new_box[0, 2], 2)),
+    # str(round(new_box[0, 6], 2) - 1.57)
 
 if __name__ == '__main__':
     for filename in os.listdir(INPUT_DIRECTORY):
