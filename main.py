@@ -143,30 +143,24 @@ def corners_3d_to_boxes(corners):
     dx = distance(corners[0, :], corners[3, :])
     dy = distance(corners[0, :], corners[1, :])
     dz = distance(corners[0, :], corners[4, :])
-    rz = np.arctan2(dy, dx) - 1.57
-    # print("1", np.arctan2(dx, dy))
-    # print("2", np.arctan2(dx, 2*dz))
-    # print("3", np.arctan2(dy, dx))
-    # print("4", np.arctan2(dy, 2*dz))
-    # print("5", np.arctan2(2*dz, dx))
-    # print("6", np.arctan2(2*dz, dy))
-    return np.array([cx, cy, cz, dx, dy, dz, rz])
+    rz = np.arctan2(corners[3, 0] - corners[2, 0], corners[3, 1] - corners[2, 1])
+    return np.array([cx, cy, cz, dx, dy, dz, -rz])
 
 
 def main():
-    file_number = '1279'
+    file_number = '1192'
     tilt_csv_file = f'./not_upload_data/point_cloud/input/xyzi_m1412_{file_number}.csv'
     tilt_label_file = f'./not_upload_data/labels/input/label_m1412_{file_number}.txt'
     tilt_pointclouds = np.genfromtxt(tilt_csv_file, delimiter=',')
     kitty_objs = read_kitti_format_for_metrolinx(tilt_label_file)
     kitty_boxes = np.array([ko.get_3d_box_in_world_coordinates() for ko in kitty_objs])
     tilt_corners3d = boxes_to_corners_3d(kitty_boxes)
-    print(tilt_corners3d)
     kitty_boxes[0, 6] = 0
     tilt_corners3d_1 = boxes_to_corners_3d(kitty_boxes)
-    print(tilt_corners3d_1)
     corners_3d_to_boxes(tilt_corners3d[0])
-    # exit(0)
+    print("that", kitty_objs[0].get_rotation_y())
+
+    exit(0)
     # print("mean", np.mean(tilt_corners3d, axis=1))
     #
     # print("center", kitty_objs[0]._xzy())
