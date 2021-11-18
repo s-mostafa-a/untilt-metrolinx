@@ -59,29 +59,11 @@ def boxes_to_corners_3d(boxes3d):
         [1, 1, -1], [1, -1, -1], [-1, -1, -1], [-1, 1, -1],
         [1, 1, 1], [1, -1, 1], [-1, -1, 1], [-1, 1, 1],
     )) / 2
-    print()
     corners3d = boxes3d[:, None, 3:6].repeat(1, 8, 1) * template[None, :, :]
     corners3d = rotate_points_along_z(corners3d.view(-1, 8, 3), boxes3d[:, 6]).view(-1, 8, 3)
     corners3d += boxes3d[:, None, 0:3]
 
     return corners3d.numpy() if is_numpy else corners3d
-
-
-def center_to_eight_corners(xyz, hwl):
-    x = xyz[0]
-    y = xyz[1]
-    z = xyz[2]
-    height = hwl[0]
-    width = hwl[1]
-    length = hwl[2]
-    return np.array([[x + length / 2, y, z + width / 2],
-                     [x + length / 2, y, z - width / 2],
-                     [x - length / 2, y, z + width / 2],
-                     [x - length / 2, y, z - width / 2],
-                     [x + length / 2, y - height, z + width / 2],
-                     [x + length / 2, y - height, z - width / 2],
-                     [x - length / 2, y - height, z + width / 2],
-                     [x - length / 2, y - height, z - width / 2]])
 
 
 class KittyObject(object):
@@ -127,6 +109,9 @@ class KittyObject(object):
     def get_3d_box_in_world_coordinates(self):
         return np.concatenate((self._xzy(), self._hlw(), [self._rotation_y]))
 
+    def get_rotation_y(self):
+        return self._rotation_y
+
 
 def read_kitti_format_for_metrolinx(file):
     kitty_objects = []
@@ -138,21 +123,66 @@ def read_kitti_format_for_metrolinx(file):
     return kitty_objects
 
 
+def distance(p1, p2):
+    return np.sqrt(np.sum((p1 - p2) ** 2))
+
+
+def corners_3d_to_boxes(corners):
+    """
+        7 -------- 4
+       /|         /|
+      6 -------- 5 .
+      | |        | |
+      . 3 -------- 0
+      |/         |/
+      2 -------- 1
+    """
+    # check if 0,1,2,3 are in the same plane or 0,1,5,4 or even 0,3,7,4
+    # hypothesis: 0,1,2,3 are in the same plane
+    cx, cy, cz = np.mean(corners, axis=0)
+    dx = distance(corners[0, :], corners[3, :])
+    dy = distance(corners[0, :], corners[1, :])
+    dz = distance(corners[0, :], corners[4, :])
+    rz = np.arctan2(dy, dx) - 1.57
+    # print("1", np.arctan2(dx, dy))
+    # print("2", np.arctan2(dx, 2*dz))
+    # print("3", np.arctan2(dy, dx))
+    # print("4", np.arctan2(dy, 2*dz))
+    # print("5", np.arctan2(2*dz, dx))
+    # print("6", np.arctan2(2*dz, dy))
+    return np.array([cx, cy, cz, dx, dy, dz, rz])
+
+
 def main():
     file_number = '1279'
-    tilt_csv_file = f'./data/point_cloud/input/xyzi_m1412_{file_number}.csv'
-    tilt_label_file = f'./data/labels/input/label_m1412_{file_number}.txt'
+    tilt_csv_file = f'./not_upload_data/point_cloud/input/xyzi_m1412_{file_number}.csv'
+    tilt_label_file = f'./not_upload_data/labels/input/label_m1412_{file_number}.txt'
     tilt_pointclouds = np.genfromtxt(tilt_csv_file, delimiter=',')
     kitty_objs = read_kitti_format_for_metrolinx(tilt_label_file)
     kitty_boxes = np.array([ko.get_3d_box_in_world_coordinates() for ko in kitty_objs])
     tilt_corners3d = boxes_to_corners_3d(kitty_boxes)
-
+    print(tilt_corners3d)
+    kitty_boxes[0, 6] = 0
+    tilt_corners3d_1 = boxes_to_corners_3d(kitty_boxes)
+    print(tilt_corners3d_1)
+    corners_3d_to_boxes(tilt_corners3d[0])
+    # exit(0)
+    # print("mean", np.mean(tilt_corners3d, axis=1))
+    #
+    # print("center", kitty_objs[0]._xzy())
+    # print("hlw", kitty_objs[0]._hlw())
+    #
+    # print("------------------")
+    # print("mine", corners_3d_to_boxes(tilt_corners3d[0]))
+    # print("that", kitty_objs[0].get_rotation_y())
+    # exit(0)
     # untilt_pointclouds = deepcopy(tilt_pointclouds)
     # untilt_pointclouds[:, :3] = rotate_points(tilt_pointclouds[:, :3])
     # untilt_corners3d = rotate_points(tilt_corners3d.squeeze(0))[None, ::]
     # draw_metrolinx_scene(untilt_pointclouds, untilt_corners3d)
     # draw_metrolinx_scene(tilt_pointclouds, my_corners[None, ::])
     draw_metrolinx_scene(tilt_pointclouds, tilt_corners3d)
+    draw_metrolinx_scene(tilt_pointclouds, tilt_corners3d_1)
     mlab.show(stop=True)
 
 
