@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Oct 27 17:17:20 2021
+
+@author: jacob
+visualization for metrolinx dataset
+"""
+
 import mayavi.mlab as mlab
 import numpy as np
 import torch
@@ -466,3 +475,29 @@ def draw_corners3d(corners3d, fig, color=(1, 1, 1), line_width=2, cls=None, tag=
                     line_width=line_width, figure=fig)
 
     return fig
+
+
+def main():
+    file = '1279'
+    tilt_csv_file = f'./data/point_cloud/input/xyzi_m1412_{file}.csv'
+    untilt_csv_file = f'./data/point_cloud/output/xyzi_m1412_{file}.csv'
+
+    tilt_label_file = f'./data/labels/input/label_m1412_{file}.txt'
+    untilt_label_file = f'./data/labels/output/label_m1412_{file}.txt'
+
+    tilt_pointclouds = np.genfromtxt(tilt_csv_file, delimiter=',')
+    untilt_pointclouds = np.genfromtxt(untilt_csv_file, delimiter=',')
+
+    tilt_boxes, _, _ = read_metro_linx_label(tilt_label_file)
+    untilt_boxes, _, _ = read_metro_linx_label(untilt_label_file)
+
+    tilt_corners3d = boxes_to_corners_3d(tilt_boxes)
+    untilt_corners3d = boxes_to_corners_3d(untilt_boxes)
+
+    draw_metrolinx_scene(tilt_pointclouds, tilt_corners3d)
+    draw_metrolinx_scene(untilt_pointclouds, untilt_corners3d)
+    mlab.show(stop=True)
+
+
+if __name__ == '__main__':
+    main()

@@ -1,1 +1,6 @@
 numpy~=1.19.5
+torch~=1.10.0
+mayavi~=4.7.4
+laspy~=2.0.3
+PyQt5~=5.15.6
+vtk~=9.1.0

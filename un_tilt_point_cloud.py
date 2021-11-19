@@ -4,8 +4,8 @@ import numpy as np
 from utils import rotate_points
 
 # you may want to change these variables
-INPUT_DIRECTORY = './not_upload_data/point_cloud/input'
-OUTPUT_DIRECTORY = './not_upload_data/point_cloud/output'
+INPUT_DIRECTORY = './data/point_cloud/input'
+OUTPUT_DIRECTORY = './data/point_cloud/output'
 
 
 def rotate_csv(file_name):
