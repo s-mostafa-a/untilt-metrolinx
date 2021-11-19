@@ -66,6 +66,28 @@ def box_to_corners_3d(boxes3d):
     return corners3d.numpy() if is_numpy else corners3d
 
 
+def extract_kitty_labels_from_the_line(file):
+    with open(file) as f:
+        lines = f.readlines()
+        line = lines[0]
+    line = line.replace('\n', '')
+    line = line.split(' ')
+    label = line[0]
+    array = np.fromstring(', '.join(line[1:]), dtype=float, sep=',')
+    truncation = array[0]
+    occlusion = array[1]
+    alpha = array[2]
+    two_d_bbox = array[3:7]
+    hwl = array[7:10]
+    xyz = array[10:13]
+    rotation_y = array[13]
+    if len(array) > 14:
+        score = array[14]
+    else:
+        score = np.nan
+    return label, truncation, occlusion, alpha, tuple(two_d_bbox), tuple(hwl), tuple(xyz), rotation_y, score
+
+
 class KittyObject(object):
     def __init__(self, line: str):
         line = line.replace('\n', '')
@@ -165,6 +187,19 @@ def main():
     file_number = '1192'
     tilt_csv_file = f'./not_upload_data/point_cloud/input/xyzi_m1412_{file_number}.csv'
     tilt_label_file = f'./not_upload_data/labels/input/label_m1412_{file_number}.txt'
+    print()
+    label, truncation, occlusion, alpha, two_d_bbox, hwl, xyz, rotation_y, score = extract_kitty_labels_from_the_line(
+        tilt_label_file)
+    box_in_world_coordinate = np.concatenate(
+        (np.array([xyz[0], xyz[2], xyz[1]]), np.array([hwl[0], hwl[2], hwl[1]]), [rotation_y]))
+    tilt_corners_3d = box_to_corners_3d(box_in_world_coordinate[None, ::])
+    tilted_box = corners_3d_to_boxes(tilt_corners_3d.squeeze(0))
+    xzy = tilted_box[0:3]
+    hlw = tilted_box[3:6]
+    rotation_z = tilted_box[6]
+    print(xyz, hwl, rotation_y)
+    print(xzy, hlw, rotation_z)
+    exit(0)
     tilt_pointclouds = np.genfromtxt(tilt_csv_file, delimiter=',')
     kitty_objs = read_kitti_format_for_metrolinx(tilt_label_file)
     kitty_boxes = np.array([ko.get_3d_box_in_world_coordinates() for ko in kitty_objs])
