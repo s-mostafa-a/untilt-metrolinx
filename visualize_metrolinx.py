@@ -290,11 +290,11 @@ def boxes_to_corners_3d(boxes3d):
 
 
 def visualize_pts(pts, fig=None, bgcolor=(0, 0, 0), fgcolor=(1.0, 1.0, 1.0),
-                  show_intensity=False, size=(600, 600), draw_origin=True):
+                  show_intensity=False, size=(600, 600), draw_origin=True, title=None):
     if not isinstance(pts, np.ndarray):
         pts = pts.cpu().numpy()
     if fig is None:
-        fig = mlab.figure(figure=None, bgcolor=bgcolor, fgcolor=fgcolor, engine=None, size=size)
+        fig = mlab.figure(figure=title, bgcolor=bgcolor, fgcolor=fgcolor, engine=None, size=size)
 
     if show_intensity:
         G = mlab.points3d(pts[:, 0], pts[:, 1], pts[:, 2], pts[:, 3], mode='point',
@@ -417,8 +417,8 @@ def fix_bb(points, corners3d):
     return corners3d
 
 
-def draw_metrolinx_scene(points, corners3d):
-    fig = visualize_pts(points)
+def draw_metrolinx_scene(points, corners3d, title=None):
+    fig = visualize_pts(points, title=title)
     fig = draw_multi_grid_range(fig, bv_range=(0, -80, 80, 80))
     fig = draw_corners3d(corners3d, fig=fig, color=(0, 0, 1), max_num=100)
     mlab.view(azimuth=-179, elevation=54.0, distance=104.0, roll=90.0)
